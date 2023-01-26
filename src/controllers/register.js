@@ -1,7 +1,5 @@
 
-//importing model
-import bodyParser from 'body-parser';
-import bcrypt from 'bcrypt';
+//importing modules
 import handlerror from '../middleware/err.js';
 import dotenv from 'dotenv';
 import uuid from 'uuid-random';
@@ -26,14 +24,10 @@ const Postregister = async (req, res) => {
   if (confirm_password != password) {
     res.status(400).json({ "msg": "confirm password doesn't match" });
   }
-  // else if(password.length<8){
-  //   res.status(400).json("Minimum password length 8 character");
-  // }
   const hashed = md5(password);
 
   try {
     //generate uuid
-
     const userId = uuid();
     const userData = {
       userId: userId,

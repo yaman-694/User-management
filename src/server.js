@@ -1,10 +1,8 @@
 import express from "express"
 import register from './routes/register.js'
 import updateProfile from './routes/UpdateProfile.js'
-import bodyParser from "body-parser"
 import mysql from 'mysql'
 import deactivateAccount from './routes/deactivate.js'
-// import verifyToken from "./middleware/auth.js";
 import deleteAccount from './routes/deleteAccount.js'
 import showAll from './routes/showAll.js'
 const app = express();
@@ -19,7 +17,6 @@ const connection = mysql.createConnection({
     database: 'myapp'
 });
 connection.connect();
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({extended: false}))
 app.use(express.json())
 // app.use(verifyToken);
