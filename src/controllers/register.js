@@ -34,11 +34,19 @@ const Postregister = async (req, res) => {
       name: name,
       email: email
     }
-    const query = `INSERT INTO user (userId, name, email, password) VALUES ('${userId}','${name}', '${email}', '${hashed}')`;
-    db.query(query, (error, results) => {
-      if (error) {
+    if(userData.name == "" || userData.email == "" || userData.password == ""){
+      res.status(400).json({ "msg": "Please fill all the fields" });
+    }
+    else{
+
+      const query = `INSERT INTO user (userId, name, email, password) VALUES ('${userId}','${name}', '${email}', '${hashed}')`;
+      db.query(query, (error, results) => {
+        if (error) {
         const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         log("register", ip);
+        console.log(userData);
+        const token = createToken(userId);
+        res.cookie('auth', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
         res.json({ message: "Email already exist" });
       }
       else {
@@ -49,9 +57,10 @@ const Postregister = async (req, res) => {
         res.cookie('auth', token, { httpOnly: true, maxAge: 3 * 24 * 60 * 60 * 1000 });
         res.status(201).json({ message: "success", user: userData })
       }
+    
     });
 
-
+  }
   } catch (err) {
     const error = handlerror(err);
     console.log(err)
